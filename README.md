@@ -172,6 +172,7 @@ Main server file:
 ```text
 src/server/mcp_server.py
 ```
+![MCP Inspector Tools](assets/ss_1.png)
 
 ### Baseline QA
 A deterministic semiconductor QA tool used as a controlled baseline.
