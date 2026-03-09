@@ -1,4 +1,4 @@
-![ChipScope-MCP Banner](assets/chipscope-mcp-banner.png)
+![ChipScope-MCP Banner](C:\Users\nicho\Documents\chipscope-mcp\assets\chipscope-mcp-banner.png)
 
 # ChipScope-MCP
 
