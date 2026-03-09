@@ -1,3 +1,5 @@
+![ChipScope-MCP Banner](assets/chipscope-mcp-banner.png)
+
 # ChipScope-MCP
 
 ChipScope-MCP is an MCP-native Semiconductor Intelligence Agent built to explore how modern AI systems can combine domain-specific context, tool-based interfaces, and evaluation-driven iteration.
