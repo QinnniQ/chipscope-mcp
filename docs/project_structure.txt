@@ -1,0 +1,29 @@
+chipscope-mcp/
+│
+├── assets/
+├── docs/
+│   └── project_structure.txt
+├── notebooks/
+├── src/
+│   ├── data/
+│   │   ├── raw/
+│   │   │   └── companies/
+│   │   │       ├── asml.txt
+│   │   │       ├── tsmc.txt
+│   │   │       └── intel.txt
+│   │   └── processed/
+│   │       └── company_metadata/
+│   │           ├── asml.json
+│   │           ├── tsmc.json
+│   │           └── intel.json
+│   ├── evals/
+│   │   ├── cases/
+│   │   ├── results/
+│   │   ├── compare_eval_runs.py
+│   │   ├── run_company_qa_eval.py
+│   │   └── run_company_qa_eval_llm.py
+│   └── server/
+│       └── mcp_server.py
+├── .env
+├── .gitignore
+└── README.md

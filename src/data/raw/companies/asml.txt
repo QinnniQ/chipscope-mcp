@@ -1,0 +1,3 @@
+ASML is a Dutch semiconductor equipment company and a key supplier of lithography systems used in chip manufacturing.
+It is especially known for extreme ultraviolet (EUV) lithography, which is critical for advanced semiconductor fabrication.
+ASML plays a central role in the global semiconductor supply chain.

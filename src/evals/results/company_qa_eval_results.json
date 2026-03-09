@@ -1,0 +1,59 @@
+{
+  "summary": {
+    "passed": 5,
+    "total": 5,
+    "score": "5/5"
+  },
+  "results": [
+    {
+      "id": "eval_001",
+      "company": "asml",
+      "question": "Where is ASML based?",
+      "passed": true,
+      "expected": "ASML is based in Netherlands.",
+      "actual": "ASML is based in Netherlands.",
+      "check_type": "exact_match"
+    },
+    {
+      "id": "eval_002",
+      "company": "tsmc",
+      "question": "What is TSMC known for?",
+      "passed": true,
+      "expected": "TSMC is especially known for Advanced chip foundry services.",
+      "actual": "TSMC is especially known for Advanced chip foundry services.",
+      "check_type": "exact_match"
+    },
+    {
+      "id": "eval_003",
+      "company": "intel",
+      "question": "What role does Intel play in the supply chain?",
+      "passed": true,
+      "expected": "Intel plays the role of Integrated device manufacturer in the semiconductor supply chain.",
+      "actual": "Intel plays the role of Integrated device manufacturer in the semiconductor supply chain.",
+      "check_type": "exact_match"
+    },
+    {
+      "id": "eval_004",
+      "company": "asml",
+      "question": "Tell me about ASML",
+      "passed": true,
+      "expected_contains": [
+        "ASML",
+        "Netherlands",
+        "Semiconductor equipment",
+        "Lithography systems, especially EUV"
+      ],
+      "actual": "ASML is a semiconductor company based in Netherlands. It operates in Semiconductor equipment and is known for Lithography systems, especially EUV. Supply chain role: Equipment supplier. Additional note: ASML is a Dutch semiconductor equipment company and a key supplier of lithography systems used in chip manufacturing.\nIt is especially known for extreme ultraviolet (EUV) lithography, which is critical for advanced semiconductor fabrication.\nASML plays a central role in the global semiconductor supply chain.",
+      "check_type": "contains_all"
+    },
+    {
+      "id": "eval_005",
+      "company": "amd",
+      "question": "Where is AMD based?",
+      "passed": true,
+      "expected": "No local company file found for 'amd'.",
+      "actual": "No local company file found for 'amd'.",
+      "check_type": "exact_match"
+    }
+  ]
+}

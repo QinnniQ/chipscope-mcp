@@ -1,0 +1,37 @@
+[
+  {
+    "id": "llm_eval_001",
+    "company": "asml",
+    "question": "Where is ASML based?",
+    "expected_answer_contains": ["ASML", "Netherlands"]
+  },
+  {
+    "id": "llm_eval_002",
+    "company": "tsmc",
+    "question": "What is TSMC known for?",
+    "expected_answer_contains": ["TSMC", "Advanced chip foundry services"]
+  },
+  {
+    "id": "llm_eval_003",
+    "company": "intel",
+    "question": "What role does Intel play in the supply chain?",
+    "expected_answer_contains": ["Intel", "Integrated device manufacturer", "semiconductor supply chain"]
+  },
+  {
+    "id": "llm_eval_004",
+    "company": "asml",
+    "question": "Tell me about ASML",
+    "expected_answer_contains": [
+      "ASML",
+      "Netherlands",
+      "Semiconductor equipment",
+      "Lithography systems, especially EUV"
+    ]
+  },
+  {
+    "id": "llm_eval_005",
+    "company": "amd",
+    "question": "Where is AMD based?",
+    "expected_answer_contains": ["No local company file found", "amd"]
+  }
+]

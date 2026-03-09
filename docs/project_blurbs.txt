@@ -1,0 +1,3 @@
+MCP-native semiconductor intelligence agent with deterministic and LLM-based QA, structured metadata, and eval-driven iteration.
+Built ChipScope-MCP, an MCP-native Semiconductor Intelligence Agent that combines structured company metadata, local context resources, deterministic and LLM-based QA tools, and repeatable eval workflows. Designed to demonstrate modern AI engineering skills in tool/resource design, grounded generation, and evaluation-driven iteration.
+Built an MCP-native semiconductor intelligence system with baseline and LLM-backed QA, structured context handling, and eval-driven prompt refinement, showcasing practical AI engineering beyond a standard chatbot demo.

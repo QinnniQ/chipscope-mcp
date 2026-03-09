@@ -1,0 +1,77 @@
+{
+  "summary": {
+    "passed": 5,
+    "total": 5,
+    "score": "5/5"
+  },
+  "results": [
+    {
+      "id": "llm_eval_001",
+      "company": "asml",
+      "question": "Where is ASML based?",
+      "passed": true,
+      "expected_contains": [
+        "ASML",
+        "Netherlands"
+      ],
+      "missing_parts": [],
+      "actual": "ASML is based in the Netherlands.",
+      "check_type": "contains_all_normalized"
+    },
+    {
+      "id": "llm_eval_002",
+      "company": "tsmc",
+      "question": "What is TSMC known for?",
+      "passed": true,
+      "expected_contains": [
+        "TSMC",
+        "Advanced chip foundry services"
+      ],
+      "missing_parts": [],
+      "actual": "TSMC is known for being the world's largest dedicated semiconductor foundry, specializing in advanced chip foundry services. As a foundational company in the global semiconductor ecosystem, it manufactures chips for many major technology companies and plays a significant role in the production of advanced AI hardware.",
+      "check_type": "contains_all_normalized"
+    },
+    {
+      "id": "llm_eval_003",
+      "company": "intel",
+      "question": "What role does Intel play in the supply chain?",
+      "passed": true,
+      "expected_contains": [
+        "Intel",
+        "Integrated device manufacturer",
+        "semiconductor supply chain"
+      ],
+      "missing_parts": [],
+      "actual": "Intel plays the role of an \"Integrated device manufacturer\" in the semiconductor supply chain.",
+      "check_type": "contains_all_normalized"
+    },
+    {
+      "id": "llm_eval_004",
+      "company": "asml",
+      "question": "Tell me about ASML",
+      "passed": true,
+      "expected_contains": [
+        "ASML",
+        "Netherlands",
+        "Semiconductor equipment",
+        "Lithography systems, especially EUV"
+      ],
+      "missing_parts": [],
+      "actual": "ASML is a Netherlands-based company operating in the semiconductor equipment segment. It specializes in lithography systems, especially EUV, and serves as an equipment supplier. ASML plays a central role in the global semiconductor supply chain.",
+      "check_type": "contains_all_normalized"
+    },
+    {
+      "id": "llm_eval_005",
+      "company": "amd",
+      "question": "Where is AMD based?",
+      "passed": true,
+      "expected_contains": [
+        "No local company file found",
+        "amd"
+      ],
+      "missing_parts": [],
+      "actual": "No local company file found for 'amd'.",
+      "check_type": "contains_all_normalized"
+    }
+  ]
+}
