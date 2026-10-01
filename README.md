@@ -1,305 +1,81 @@
-![ChipScope-MCP Banner](assets/chipscope-mcp-banner.png)
+![ChipScope MCP banner](assets/chipscope-mcp-banner.png)
 
-# ChipScope-MCP
+# ChipScope MCP
 
-ChipScope-MCP is an MCP-native Semiconductor Intelligence Agent built to explore how modern AI systems can combine domain-specific context, tool-based interfaces, and evaluation-driven iteration.
+**A small MCP server for comparing semiconductor companies with explicit tools and testable answers.** An AI client can ask ChipScope to retrieve a local company note, compare structured company facts, or answer a question using either fixed rules or an LLM. The project explores a practical agent-engineering question: *how do you make a model's access to domain context inspectable and measurable?*
 
-It answers semiconductor company questions using local company notes, structured metadata, a deterministic baseline QA system, and an LLM-backed QA tool.
+[![Tests](https://github.com/QinnniQ/chipscope-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/QinnniQ/chipscope-mcp/actions/workflows/tests.yml) ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 
-## Why this project matters
+## What it demonstrates
 
-Many AI portfolio projects stop at a chatbot demo.
+| Part | What it does | Engineering decision |
+| --- | --- | --- |
+| MCP tools | Expose summaries, side-by-side metadata, rule-based QA, and LLM QA to an MCP client | Give an agent named, inspectable actions instead of one opaque chat prompt. |
+| MCP resources | Expose local company notes as `semiconductor://` resources | Keep source context separate from tool calls. |
+| Rule-based baseline | Answer known question types directly from metadata | Provide predictable behavior to compare with generative answers. |
+| LLM answer path | Send the selected local note and metadata to OpenAI Responses | Allow more flexible wording while constraining the available context. |
+| Evaluation | Run saved cases and compare baseline and LLM results by company and question | Reveal differences and regressions on a fixed set of examples. |
 
-ChipScope-MCP goes further by combining:
-- **MCP (Model Context Protocol)** for tool and resource exposure
-- a focused, high-value domain: **semiconductor intelligence**
-- both **deterministic** and **LLM-based** question answering
-- **repeatable evals** used to measure and improve system behavior
+The current dataset contains **three manually prepared company profiles: ASML, TSMC, and Intel**. There is no live data ingestion, document retrieval, source citation, or deployed customer service. Treat the notes as illustrative context that can become outdated, not as verified investment or semiconductor research.
 
-The goal is to demonstrate practical AI engineering skills that matter for modern agent systems: structured context design, grounded generation, evaluation workflows, and iterative improvement.
-
-## What it does
-
-ChipScope-MCP currently supports:
-- MCP tools for semiconductor company summaries and comparisons
-- MCP resources and resource templates for company-specific notes
-- deterministic company QA as a controlled baseline
-- LLM-backed company QA grounded on local metadata and notes
-- saved baseline and LLM eval runs
-- side-by-side eval comparison for system analysis
-
-## Current companies
-
-The current local dataset includes:
-- ASML
-- TSMC
-- Intel
-
-## Tech stack
-
-- Python
-- MCP Python SDK
-- OpenAI API
-- PowerShell
-- JSON-based eval datasets
-
-## Project structure
-
-```text
-chipscope-mcp/
-│
-├── assets/
-├── docs/
-├── notebooks/
-├── src/
-│   ├── data/
-│   │   ├── raw/
-│   │   │   └── companies/
-│   │   │       ├── asml.txt
-│   │   │       ├── tsmc.txt
-│   │   │       └── intel.txt
-│   │   └── processed/
-│   │       └── company_metadata/
-│   │           ├── asml.json
-│   │           ├── tsmc.json
-│   │           └── intel.json
-│   ├── evals/
-│   │   ├── cases/
-│   │   ├── results/
-│   │   ├── compare_eval_runs.py
-│   │   ├── run_company_qa_eval.py
-│   │   └── run_company_qa_eval_llm.py
-│   └── server/
-│       └── mcp_server.py
-├── .env
-├── .gitignore
-├── README.md
-└── requirements.txt
-```
+![MCP Inspector showing ChipScope tools](assets/ss_1.png)
 
 ## Architecture
 
-ChipScope-MCP is organized around a simple but extensible agent architecture:
-
-1. **Local semiconductor data layer**
-   - company notes stored as raw text files
-   - company metadata stored as structured JSON
-
-2. **MCP server layer**
-   - exposes tools for summaries, comparison, and question answering
-   - exposes resources and resource templates for semiconductor company context
-
-3. **QA layer**
-   - a deterministic baseline QA tool for controlled behavior
-   - an LLM-backed QA tool for more flexible grounded responses
-
-4. **Evaluation layer**
-   - baseline eval cases for deterministic QA
-   - LLM-specific eval cases for generative QA
-   - saved result artifacts for comparison and iteration
-
-## System flow
-
-```text
-Local company notes + metadata
-            ↓
-        MCP server
-            ↓
-   Tools / Resources / Templates
-            ↓
- Baseline QA tool   |   LLM QA tool
-            ↓
-      Eval runners + saved results
+```mermaid
+flowchart LR
+    A[Local notes and JSON metadata] --> B[FastMCP server]
+    B --> C[Tools: summary and comparison]
+    B --> D[Tools: rule-based and LLM QA]
+    B --> E[Company-note resources]
+    D --> F[Saved evaluation cases]
+    F --> G[Paired result comparison]
 ```
 
-## Why MCP and evals
+`src/server/mcp_server.py` reads one company slug at a time from local files. The LLM path uses the same local context to build its prompt; an API key is needed only for that path. Invalid names are rejected before any file read. The tools and resources can be inspected with an MCP client such as [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
 
-This project was intentionally built around two ideas that are becoming increasingly important in modern AI engineering:
+## What the saved results show
 
-### Why MCP
-MCP helps standardize how AI systems expose and consume:
-- tools
-- resources
-- structured context
+| Saved run | Result | Scope |
+| --- | ---: | --- |
+| Rule-based QA | 5/5 | Exact or required-text checks on five hand-written cases. |
+| LLM QA | 5/5 | Case-insensitive required-text checks on five hand-written cases. |
 
-Instead of building a one-off chatbot, ChipScope-MCP is designed like a small agent system with explicit interfaces for company summaries, company resources, comparisons, and question answering.
+These [committed results](src/evals/results/) are a **small smoke-test snapshot**. They do not measure factual accuracy beyond the local notes, citation quality, hallucination rate, statistical reliability, or performance on unseen questions. The LLM run requires an API key and can vary across reruns; CI verifies the deterministic paths without making paid API calls. The comparison script now pairs answers to the *same company and question*, even though the two result files use different case IDs.
 
-### Why evals
-AI systems are easy to demo and much harder to measure.
+## Run it locally
 
-ChipScope-MCP includes:
-- a deterministic baseline QA system
-- an LLM-backed QA system
-- repeatable eval datasets
-- saved eval artifacts
-- iterative improvement based on failure analysis
+Requires Python 3.10+. From the repository root:
 
-This makes the project less about prompting in isolation and more about building AI systems that can be tested, compared, and improved over time.
-
-## What this demonstrates
-
-This project demonstrates practical skills in:
-
-- MCP-native tool and resource design
-- structured and unstructured context handling
-- deterministic vs LLM-based system comparison
-- evaluation-driven development
-- prompt refinement based on measured failure cases
-- building domain-specific AI systems rather than generic demos
-
-From a portfolio perspective, ChipScope-MCP is meant to show how modern AI engineering goes beyond model calls alone and includes interfaces, grounding, testing, and iteration.
-
-## Roadmap
-
-Planned next improvements:
-
-- ingest real semiconductor filings and earnings transcripts
-- add retrieval with evidence-backed answers
-- attach citations or source snippets to answers
-- expand the evaluation suite beyond simple QA checks
-- add a lightweight UI for interactive exploration
-- benchmark baseline vs LLM behavior on larger domain tasks
-
-## Core components
-
-### MCP server
-The MCP server exposes:
-- tools
-- resources
-- resource templates
-
-Main server file:
-```text
-src/server/mcp_server.py
-```
-![MCP Inspector Tools](assets/ss_1.png)
-
-### Baseline QA
-A deterministic semiconductor QA tool used as a controlled baseline.
-
-### LLM QA
-An LLM-backed semiconductor QA tool grounded on local company metadata and notes.
-
-### Evals
-The project includes:
-- a baseline eval suite
-- an LLM eval suite
-- saved JSON eval results
-- an eval comparison script
-
-## Example capabilities
-
-Example questions:
-- Where is ASML based?
-- What is TSMC known for?
-- What role does Intel play in the semiconductor supply chain?
-- Tell me about ASML.
-
-## Eval results
-
-Current status:
-- Baseline QA eval: **5/5**
-- LLM QA eval: **5/5**
-
-This score was achieved through iterative prompt refinement and evaluation-driven debugging.
-
-## What I learned
-
-This project helped me practice:
-- MCP server design
-- tool vs resource separation
-- structured vs unstructured context handling
-- deterministic vs LLM system comparison
-- evaluation-driven iteration
-- prompt refinement based on failure analysis
-
-## Setup
-
-Clone the repository and create a virtual environment:
-
-```powershell
+```bash
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+# Activate .venv for your shell, then:
+python -m pip install -r requirements.txt
+python src/evals/run_company_qa_eval.py
 ```
 
-Install dependencies:
+To run the LLM evaluation, copy `.env.example` to `.env`, set `OPENAI_API_KEY`, and run:
 
-```powershell
-pip install -r requirements.txt
+```bash
+python src/evals/run_company_qa_eval_llm.py
+python src/evals/compare_eval_runs.py
 ```
 
-Create a `.env` file with your OpenAI settings:
+The scripts overwrite the JSON files in `src/evals/results/`, so retain a copy before comparing runs you want to keep. The LLM evaluation makes paid API calls.
 
-```env
-OPENAI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4o-mini
+To inspect the MCP tools, start [MCP Inspector](https://github.com/modelcontextprotocol/inspector) and configure it to run your environment's Python executable with `src/server/mcp_server.py` as its argument. The server uses standard input/output transport when run as a script.
+
+## Tests and project limits
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest --cov=src.server.mcp_server --cov=src.evals.compare_eval_runs --cov-report=term-missing --cov-fail-under=75
 ```
 
-## How to run
+GitHub Actions runs that deterministic suite on pushes and pull requests with Python 3.10 and 3.12. The test suite covers tool outputs, company-name validation, a mocked LLM call, the fixed baseline cases, and evaluation pairing. It does **not** claim live-API, factual-research, or production-deployment coverage.
 
-Activate the virtual environment:
+## Next engineering steps
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
+Replace the hand-written notes with dated, citable source documents; add retrieval that returns the supporting passage; and expand evaluation to unsupported and adversarial questions before using the answers for decisions.
 
-Run the baseline eval:
-
-```powershell
-python .\src\evals\run_company_qa_eval.py
-```
-
-Run the LLM eval:
-
-```powershell
-python .\src\evals\run_company_qa_eval_llm.py
-```
-
-Compare eval runs:
-
-```powershell
-python .\src\evals\compare_eval_runs.py
-```
-
-Launch the MCP Inspector:
-
-```powershell
-npx @modelcontextprotocol/inspector
-```
-
-Then connect it to:
-
-- Command:
-```text
-C:/Users/YOUR_NAME/Documents/chipscope-mcp/.venv/Scripts/python.exe
-```
-
-- Arguments:
-```text
-src/server/mcp_server.py
-```
-
-## Project blurbs
-
-### GitHub repo short description
-MCP-native semiconductor intelligence agent with deterministic and LLM-based QA, structured metadata, and eval-driven iteration.
-
-### LinkedIn / CV project blurb
-Built ChipScope-MCP, an MCP-native Semiconductor Intelligence Agent that combines structured company metadata, local context resources, deterministic and LLM-based QA tools, and repeatable eval workflows. Designed to demonstrate modern AI engineering skills in tool/resource design, grounded generation, and evaluation-driven iteration.
-
-### Recruiter-facing version
-Built an MCP-native semiconductor intelligence system with baseline and LLM-backed QA, structured context handling, and eval-driven prompt refinement, showcasing practical AI engineering beyond a standard chatbot demo.
-
-## Next steps
-
-Planned improvements:
-- ingest real semiconductor filings and earnings transcripts
-- add citation-style evidence retrieval
-- expand the eval set
-- add a simple UI
-- add benchmark-style reporting for answer quality
-
-## Author
-
-Nicholai Gay  
-AI Engineer focused on MCP, agent systems, evaluation, and domain-specific AI tooling.
+**Author:** Nicholai Gay · AI engineering, agent tools, and evaluation.
