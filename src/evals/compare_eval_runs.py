@@ -13,7 +13,13 @@ def load_json(path: Path) -> dict:
 
 
 def build_result_map(results: list) -> dict:
-    return {item["id"]: item for item in results}
+    paired = {}
+    for item in results:
+        key = (item["company"].strip().casefold(), item["question"].strip().casefold())
+        if key in paired:
+            raise ValueError(f"Duplicate evaluation case: {key}")
+        paired[key] = item
+    return paired
 
 
 def main() -> None:
@@ -27,13 +33,13 @@ def main() -> None:
     print(f"Baseline score: {baseline['summary']['score']}")
     print(f"LLM score:      {llm['summary']['score']}\n")
 
-    all_ids = sorted(set(baseline_results.keys()) | set(llm_results.keys()))
+    all_cases = sorted(set(baseline_results) | set(llm_results))
 
-    for eval_id in all_ids:
-        base_case = baseline_results.get(eval_id)
-        llm_case = llm_results.get(eval_id)
+    for company, question in all_cases:
+        base_case = baseline_results.get((company, question))
+        llm_case = llm_results.get((company, question))
 
-        print(f"Case: {eval_id}")
+        print(f"Case: {company} - {question}")
 
         if base_case:
             print(f"  Baseline passed: {base_case['passed']}")

@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -20,8 +21,18 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 
+def _company_filename(company: str, extension: str) -> str | None:
+    """Accept a single local company slug, never a path supplied by a tool caller."""
+    slug = company.strip().lower()
+    if not re.fullmatch(r"[a-z0-9_-]+", slug):
+        return None
+    return f"{slug}.{extension}"
+
+
 def read_company_file(company: str) -> str:
-    filename = f"{company.strip().lower()}.txt"
+    filename = _company_filename(company, "txt")
+    if filename is None:
+        return "Invalid company name. Use a single company slug."
     filepath = COMPANIES_DIR / filename
 
     if not filepath.exists():
@@ -31,7 +42,9 @@ def read_company_file(company: str) -> str:
 
 
 def read_company_metadata(company: str) -> dict:
-    filename = f"{company.strip().lower()}.json"
+    filename = _company_filename(company, "json")
+    if filename is None:
+        return {"error": "Invalid company name. Use a single company slug."}
     filepath = METADATA_DIR / filename
 
     if not filepath.exists():
@@ -85,7 +98,7 @@ def answer_company_question(company: str, question: str) -> str:
     note = read_company_file(company)
     metadata = read_company_metadata(company)
 
-    if note.startswith("No local company file found"):
+    if note.startswith(("No local company file found", "Invalid company name")):
         return note
 
     if "error" in metadata:
@@ -128,7 +141,7 @@ def answer_company_question_llm(company: str, question: str) -> str:
     note = read_company_file(company)
     metadata = read_company_metadata(company)
 
-    if note.startswith("No local company file found"):
+    if note.startswith(("No local company file found", "Invalid company name")):
         return note
 
     if "error" in metadata:
