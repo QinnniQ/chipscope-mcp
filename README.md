@@ -2,6 +2,8 @@
 
 # ChipScope MCP
 
+[Nicholai Gay's AI engineering portfolio](https://profile.nickcloud.dev/) · [LinkedIn](https://www.linkedin.com/in/nicholai-gay-201905148/)
+
 **A small MCP server for comparing semiconductor companies with explicit tools and testable answers.** An AI client can ask ChipScope to retrieve a local company note, compare structured company facts, or answer a question using either fixed rules or an LLM. The project explores a practical agent-engineering question: *how do you make a model's access to domain context inspectable and measurable?*
 
 [![Tests](https://github.com/QinnniQ/chipscope-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/QinnniQ/chipscope-mcp/actions/workflows/tests.yml) ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
